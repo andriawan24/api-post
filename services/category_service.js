@@ -1,5 +1,6 @@
 const { Op } = require('sequelize')
 const { Category } = require('../database/models')
+const NotFoundError = require('../exceptions/NotFoundError')
 
 const getAllCategories = async (query = null) => {
   const options = {
@@ -40,6 +41,22 @@ const getAllCategories = async (query = null) => {
   return data
 }
 
+const getCategory = async (id) => {
+  const category = await Category.findOne({
+    where: { id },
+    attributes: {
+      exclude: ['createdAt', 'updatedAt']
+    }
+  })
+
+  if (!category) {
+    throw new NotFoundError('Kategori tidak ditemukan')
+  }
+
+  return category
+}
+
 module.exports = {
-  getAllCategories
+  getAllCategories,
+  getCategory
 }

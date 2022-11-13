@@ -4,6 +4,7 @@ const router = express.Router()
 const { Category } = require('../database/models')
 
 router.get('/', categoryController.getCategories)
+router.get('/:id', categoryController.getCategory)
 
 router.post('/', async (req, res) => {
   const category = await Category.create({

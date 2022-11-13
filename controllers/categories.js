@@ -31,10 +31,25 @@ module.exports = {
 
     return res.status(200).json({
       status: 'success',
+      message: 'Berhasil mendapatkan kategori',
       data: {
         categories,
         metadata
       }
     })
+  },
+  getCategory: async (req, res, next) => {
+    try {
+      const { id } = req.params
+      const category = await categoryService.getCategory(id)
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Berhasil mendapatkan kategori',
+        data: category
+      })
+    } catch (error) {
+      next(error)
+    }
   }
 }
