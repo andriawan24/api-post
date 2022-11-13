@@ -6,6 +6,7 @@ const cors = require('cors')
 
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
+const categoriesRouter = require('./routes/categories')
 
 require('dotenv').config()
 const app = express()
@@ -19,5 +20,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
+app.use('/categories', categoriesRouter)
 
 module.exports = app
