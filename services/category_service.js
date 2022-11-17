@@ -1,6 +1,7 @@
 const { Op } = require('sequelize')
 const { Category } = require('../database/models')
 const NotFoundError = require('../exceptions/NotFoundError')
+const ConflictError = require('../exceptions/ConflictError')
 
 const getAllCategories = async (query = null) => {
   const options = {
@@ -56,7 +57,51 @@ const getCategory = async (id) => {
   return category
 }
 
+const createCategory = async (name, slug) => {
+  try {
+    const category = await Category.create({
+      name,
+      slug
+    })
+
+    return category
+  } catch (err) {
+    throw new ConflictError('Nama kategori sudah digunakan')
+  }
+}
+
+const updateCategory = async (id, name, slug) => {
+  try {
+    const category = await getCategory(id)
+    const newCategory = category.update({ name, slug })
+    return newCategory
+  } catch (err) {
+    if (err instanceof NotFoundError) {
+      throw new NotFoundError(err.message)
+    } else {
+      throw new ConflictError('Nama kategori sudah digunakan')
+    }
+  }
+}
+
+const deleteCategory = async (id) => {
+  try {
+    const category = await getCategory(id)
+    const deletedCategory = category.destroy()
+    return deletedCategory
+  } catch (err) {
+    if (err instanceof NotFoundError) {
+      throw new NotFoundError(err.message)
+    } else {
+      throw new ConflictError(err.message)
+    }
+  }
+}
+
 module.exports = {
   getAllCategories,
-  getCategory
+  getCategory,
+  createCategory,
+  updateCategory,
+  deleteCategory
 }

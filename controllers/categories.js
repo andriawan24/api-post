@@ -1,4 +1,6 @@
+const NotFoundError = require('../exceptions/NotFoundError')
 const categoryService = require('../services/category_service')
+const { convertToSlug } = require('../utils/helper')
 
 module.exports = {
   getCategories: async (req, res) => {
@@ -50,6 +52,62 @@ module.exports = {
       })
     } catch (error) {
       next(error)
+    }
+  },
+  createCategory: async (req, res, next) => {
+    try {
+      const { name } = req.body
+      const slug = convertToSlug(name)
+
+      const category = await categoryService.createCategory(name, slug)
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Berhasil menambahkan kategori',
+        data: category
+      })
+    } catch (error) {
+      next(error)
+    }
+  },
+  updateCategory: async (req, res, next) => {
+    try {
+      const { id } = req.params
+      const { name } = req.body
+      const slug = convertToSlug(name)
+
+      if (!id) {
+        throw NotFoundError('kategori tidak ditemukan')
+      }
+
+      const category = await categoryService.updateCategory(id, name, slug)
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Berhasil mengubah kategori',
+        data: category
+      })
+    } catch (err) {
+      next(err)
+    }
+  },
+  deleteCategory: async (req, res, next) => {
+    try {
+      const { id } = req.params
+
+      if (!id) {
+        throw NotFoundError('kategori tidak ditemukan')
+      }
+
+      await categoryService.deleteCategory(id)
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Berhasil menghapus kategori',
+        data: null
+      })
+    } catch (err) {
+      next(err)
     }
   }
 }
