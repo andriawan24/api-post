@@ -1,5 +1,5 @@
 const NotFoundError = require('../exceptions/NotFoundError')
-const categoryService = require('../services/category_service')
+const categoryService = require('../services/category')
 const { convertToSlug } = require('../utils/helper')
 
 module.exports = {

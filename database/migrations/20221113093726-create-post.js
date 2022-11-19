@@ -23,7 +23,7 @@ module.exports = {
         allowNull: true
       },
       status: {
-        type: Sequelize.ENUM('unpublished', 'published'),
+        type: Sequelize.ENUM('unpublished', 'published', 'draft'),
         defaultValue: 'unpublished',
         allowNull: false
       },
@@ -34,7 +34,7 @@ module.exports = {
       },
       tags: {
         type: Sequelize.ARRAY(Sequelize.STRING),
-        allowNull: false
+        allowNull: true
       },
       userId: {
         field: 'users_id',

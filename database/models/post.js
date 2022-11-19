@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     status: {
-      type: DataTypes.ENUM('unpublished', 'published'),
+      type: DataTypes.ENUM('unpublished', 'published', 'draft'),
       defaultValue: 'unpublished'
     },
     featured: {
@@ -35,7 +35,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false
     },
     tags: {
-      type: DataTypes.ARRAY(DataTypes.STRING)
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true
     },
     userId: {
       field: 'users_id',
